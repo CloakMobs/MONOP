@@ -1,0 +1,49 @@
+# Task ID: 4
+# Title: Implement Dice Rolling & Player Movement
+# Status: todo
+# Dependencies: 2, 3
+# Priority: high
+# Description: Create dice rolling functionality, update the player's position in the state based on the roll, and visually represent player tokens moving on the board.
+# Details:
+Implement the core turn action: rolling dice. This involves generating random numbers, updating the current player's position in the game state, and reflecting this change visually by moving a simple representation (token) of the player on the board component.
+
+# Test Strategy:
+Verify clicking the "Roll Dice" button generates two numbers between 1 and 6.
+Verify the current player's position in the state updates correctly after a roll (e.g., newState = (oldState + rollTotal) % 40).
+Verify the visual token on the Board component moves to the correct Square corresponding to the updated position state.
+Test the wrap-around logic when passing Go (position calculation).
+
+# Subtasks:
+## 4.1 Create Dice Component & Logic [todo]
+### Dependencies: 1.2, 3.2
+### Description: Implement the UI and logic for rolling dice.
+### Details:
+Create components/Dice.tsx.
+Add a shadcn Button labelled "Roll Dice".
+Implement an onClick handler that:
+Generates two random integers between 1 and 6.
+Stores/displays the result (e.g., update component state or display directly).
+Disables the button after rolling until the next turn starts (or action is complete).
+Calls a function (passed via props or from context) to process the roll result.
+
+## 4.2 Implement Position Update Logic [todo]
+### Dependencies: 3.2, 4.1
+### Description: Update the current player's position in the global game state.
+### Details:
+Within the state management logic (context/store):
+Create a function movePlayer(playerId, rollTotal).
+This function gets the player's current position.
+Calculates the newPosition = (currentPosition + rollTotal) % 40.
+Updates the player's position in the game state.
+Identify the current player based on a currentPlayerIndex in the state (add this if not present).
+Trigger movePlayer from the Dice component's handler.
+
+## 4.3 Implement Basic Token Visualization [todo]
+### Dependencies: 2.3, 3.2, 4.2
+### Description: Display simple visual markers (tokens) for each player on the board.
+### Details:
+Modify the Board component or the Square component.
+Access the player list from the game state.
+For each Square, check if any player's position matches the square's ID.
+If a player is on that square, render a simple visual marker (e.g., a small circle div with the player's color as background). Use absolute positioning or flexbox within the square to place tokens. If multiple players are on the same square, ensure their tokens are visible (e.g., slightly offset).
+Ensure these components rendering tokens are marked 'use client' as they depend on game state. 

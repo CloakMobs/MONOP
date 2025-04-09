@@ -1,0 +1,92 @@
+# Task ID: 8
+# Title: Implement Basic Jail Logic
+# Status: todo
+# Dependencies: 3, 4, 7 (for Go To Jail card)
+# Priority: medium
+# Description: Implement the rules for being sent to Jail, staying in Jail, and options for getting out (paying, using card, rolling doubles).
+# Details:
+Handle the "Go to Jail" square action and card effect. Manage the player's state while in jail (skipping normal turns) and provide the standard options to leave jail each turn.
+
+# Test Strategy:
+Go To Jail: Land on "Go To Jail" square or draw the card. Verify player position moves to Jail square (index 10 usually), inJail becomes true, jailTurns resets to 0, and Go is not passed/paid.
+Turn Start in Jail: Verify normal dice roll is replaced with Jail options (Pay/Use Card/Roll).
+Pay Fine: Click "Pay $50". Verify money decreases, inJail becomes false, player can roll normally next turn (or immediately if rules permit).
+Use Card: Click "Use Card". Verify getOutOfJailCards decreases, inJail becomes false, player can roll. Test when no card is held.
+Roll Doubles Attempt: Click "Roll". Verify dice roll. If doubles, verify inJail becomes false and player moves the rolled amount. If not doubles, verify inJail remains true, jailTurns increments.
+Forced Exit: After 3 unsuccessful rolls (i.e., jailTurns reaches 3), verify player is forced to pay the fine (if affordable) on the next turn attempt, inJail becomes false, and they then roll and move. Handle inability to pay fine after 3 turns (bankruptcy check).
+
+# Subtasks:
+## 8.1 Add Jail State to Player [todo]
+### Dependencies: 3.1
+### Description: Ensure player state includes necessary fields for Jail status.
+### Details:
+Confirm Player state (Task 3.1) includes:
+inJail: boolean (default false)
+jailTurns: number (tracks attempts to roll doubles, default 0)
+getOutOfJailCards: number (default 0)
+
+## 8.2 Implement "Go To Jail" Action [todo]
+### Dependencies: 3.2, 4.2, 5.1, 7.4
+### Description: Create a function to send the current player directly to Jail.
+### Details:
+Create a function sendPlayerToJail(playerId).
+This function updates the player's state:
+position = <Jail Square Index> (e.g., 10)
+inJail = true
+jailTurns = 0
+This function should be called when:
+Landing on the "Go To Jail" square (in Task 5.1 dispatcher).
+Drawing the "Go To Jail" card (in Task 7.4 action execution).
+(Future): Rolling doubles 3 times in a row.
+Crucially: Ensure this movement does not trigger the Passing Go bonus.
+
+## 8.3 Modify Turn Start Logic for Jailed Players [todo]
+### Dependencies: 3.2, 8.1, 9 (Turn Management)
+### Description: Check if the current player starts their turn in Jail and present Jail options instead of normal roll.
+### Details:
+In the logic that starts a player's turn (part of Task 9):
+Check if currentPlayer.inJail is true.
+If true:
+Do not show the normal "Roll Dice" button initially.
+Show buttons for Jail options: "Pay $50 Fine", "Use Get Out of Jail Free Card" (if getOutOfJailCards > 0), "Attempt to Roll Doubles".
+Check if currentPlayer.jailTurns >= 3. If so, force payment/card use first (see 8.6).
+
+## 8.4 Implement "Pay Fine" Option [todo]
+### Dependencies: 1.2, 3.2, 8.3
+### Description: Handle the action of paying to get out of jail.
+### Details:
+Create payJailFine(playerId) function.
+Check if player has enough money ($50). Handle insufficient funds (bankruptcy potential).
+Deduct $50 from player.money.
+Set player.inJail = false.
+Set player.jailTurns = 0.
+Allow the player to proceed with their turn (roll dice and move normally). Update UI to show normal controls.
+
+## 8.5 Implement "Use Card" Option [todo]
+### Dependencies: 1.2, 3.2, 8.3
+### Description: Handle the action of using a Get Out of Jail Free card.
+### Details:
+Create useGetOutOfJailCard(playerId) function.
+Check if player.getOutOfJailCards > 0.
+Decrement player.getOutOfJailCards.
+Set player.inJail = false.
+Set player.jailTurns = 0.
+Allow the player to proceed with their turn (roll dice and move normally). Update UI.
+
+## 8.6 Implement "Roll Doubles" Attempt [todo]
+### Dependencies: 1.2, 3.2, 4.1, 8.3
+### Description: Handle the action of trying to roll doubles to get out of jail.
+### Details:
+Create attemptRollForJail(playerId) function.
+Roll the dice (use logic from Task 4.1).
+Check if the two dice values are equal (doubles).
+If doubles:
+Set player.inJail = false.
+Set player.jailTurns = 0.
+Player moves the amount shown on the dice immediately (call movePlayer logic). The turn likely ends after this move+action.
+If not doubles:
+Increment player.jailTurns.
+Check if player.jailTurns >= 3:
+Force payment: Trigger payJailFine. If successful, allow roll/move. If unsuccessful (bankruptcy), handle that.
+If jailTurns < 3 and not doubles, the player's turn ends.
+Update UI based on outcome. 

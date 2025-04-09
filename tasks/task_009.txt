@@ -1,0 +1,63 @@
+# Task ID: 9
+# Title: Implement Turn Management & Game Flow
+# Status: todo
+# Dependencies: 3, 4, 6 (Bankruptcy), 8 (Jail)
+# Priority: high
+# Description: Manage the sequence of player turns, handle skipping bankrupt or jailed players (conditionally), and implement basic game end conditions.
+# Details:
+Control the flow of the game from one player's turn to the next. Implement an "End Turn" mechanism and handle the logic for determining the next active player, skipping those who are bankrupt or remaining in jail. Define and check for the game's end condition (last player standing).
+
+# Test Strategy:
+End Turn: Click "End Turn". Verify currentPlayerIndex advances to the next active player. Test wrap-around (last player to first player).
+Skip Bankrupt Player: Mark a player as bankrupt (isActive = false). Verify their turn is skipped when "End Turn" is pressed repeatedly.
+Skip Jailed Player (Staying In): Player fails to roll doubles in jail. Verify their turn ends, and the next player becomes active.
+Jailed Player Gets Out: Player pays/uses card/rolls doubles. Verify they take their action (move if applicable) and then the turn potentially ends (or continues depending on specific Monopoly rules for getting out of jail).
+Game End: Mark all players except one as bankrupt. Verify a game over message appears, declaring the remaining player as the winner.
+
+# Subtasks:
+## 9.1 Track Current Player [todo]
+### Dependencies: 3.2
+### Description: Maintain the index of the player whose turn it is in the game state.
+### Details:
+Ensure the game state includes currentPlayerIndex: number (initialized to 0).
+
+## 9.2 Implement "End Turn" Button and Logic [todo]
+### Dependencies: 1.2, 3.2, 9.1
+### Description: Provide a way for the player to signal the end of their turn and advance to the next player.
+### Details:
+Add an "End Turn" shadcn Button to the UI (in the controls area).
+Create a function advanceTurn().
+This function should:
+Find the next player index: nextIndex = (currentPlayerIndex + 1) % numberOfPlayers.
+Loop starting from nextIndex to find the next active player (checking player.isActive flag from Task 6.4). Handle the case where all players might be inactive (game over).
+Update currentPlayerIndex in the game state to the index of the next active player.
+Reset any turn-specific state (e.g., enable dice roll button).
+The "End Turn" button should only be enabled at appropriate times (e.g., after main actions are completed). Some actions might automatically trigger advanceTurn.
+
+## 9.3 Handle Turn Skipping (Jail) [todo]
+### Dependencies: 8.3, 9.2
+### Description: Integrate jail status into turn advancement logic.
+### Details:
+Modify the turn start logic (Task 8.3).
+If a player is in jail and fails their roll attempt (and hasn't reached 3 turns), their action is just the failed roll attempt. Ensure advanceTurn() is called after this action to move to the next player.
+If a player gets out of jail, they typically proceed with a normal turn (roll and move). advanceTurn() happens after that complete turn.
+
+## 9.4 Implement Game End Condition Check [todo]
+### Dependencies: 3.2, 6.4, 9.2
+### Description: Check if only one player remains active after each turn or bankruptcy event.
+### Details:
+Create a function checkWinCondition().
+Get the list of players from the state.
+Filter/count players where isActive is true.
+If the count is 1:
+Set a gameOver: boolean flag in the game state.
+Store the winner: Player object in the state.
+Call checkWinCondition whenever a player becomes bankrupt (Task 6.4) or potentially at the start/end of each turn.
+
+## 9.5 Display Game Over / Winner Info [todo]
+### Dependencies: 1.2, 9.4
+### Description: Show a message or overlay when the game ends, indicating the winner.
+### Details:
+Conditionally render a component (e.g., a large Dialog or an overlay) based on the gameOver flag in the state.
+Display a "Game Over!" message and the name of the winner.
+Optionally, disable all game controls when gameOver is true. 

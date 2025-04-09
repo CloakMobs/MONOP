@@ -1,0 +1,43 @@
+# Task ID: 2
+# Title: Define and Render Game Board
+# Status: todo
+# Dependencies: 1
+# Priority: high
+# Description: Define the data structure for the Monopoly board squares and create React components to visually render the static board layout.
+# Details:
+Create the data representation for all 40 squares on the board, including their type, name, price (if applicable), color group, etc. Implement React components (Board, Square) to display this data visually using CSS Grid for the layout. This task focuses on the static visual representation, not interaction yet.
+
+# Test Strategy:
+Verify the Board component renders 40 distinct areas in the correct grid formation (11x11 grid outer, 9x9 inner empty).
+Verify individual Square components display the correct name and visual cues (e.g., color bar for properties) based on the data passed via props.
+Check responsiveness/layout on different screen sizes if applicable (though less critical for a personal clone initially).
+
+# Subtasks:
+## 2.1 Define Board Square Data Structure [todo]
+### Dependencies: None
+### Description: Create a data structure representing all squares on the Monopoly board.
+### Details:
+Create a file (e.g., src/data/board.ts or lib/boardData.ts).
+Define an array of objects, where each object represents a square.
+Include properties like: id (0-39), name, type ('property', 'chance', 'community-chest', 'tax', 'railroad', 'utility', 'corner-go', 'corner-jail', 'corner-parking', 'corner-go-to-jail'), price (if applicable), colorGroup (if property), rent (base rent, potentially array for houses).
+
+## 2.2 Create Square Component [todo]
+### Dependencies: 1.2, 2.1
+### Description: Develop a React component to render a single square on the board.
+### Details:
+Create components/Square.tsx.
+The component should accept a square data object (from 2.1) as a prop.
+Render the square's name.
+Conditionally render a colored bar at the top for properties based on colorGroup.
+Use shadcn Card component or styled divs for the visual representation.
+Apply appropriate Tailwind classes for styling (size, border, text).
+
+## 2.3 Create Board Component [todo]
+### Dependencies: 1.2, 2.1, 2.2
+### Description: Develop a React component that arranges Square components into the classic Monopoly board layout.
+### Details:
+Create components/Board.tsx.
+Use CSS Grid (Tailwind grid classes) to create the 11x11 layout structure.
+Map over the board data array (from 2.1).
+Render a Square component for each item, passing the square data as props.
+Calculate the correct grid position for each square to form the border layout. The center area will be empty or used for logos/card decks later. 

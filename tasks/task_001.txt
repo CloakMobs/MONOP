@@ -1,0 +1,49 @@
+# Task ID: 1
+# Title: Project Setup & Basic Layout
+# Status: todo
+# Dependencies: None
+# Priority: high
+# Description: Initialize the Next.js project with the App Router, integrate shadcn/ui and Tailwind CSS, and create the basic visual structure for the game page.
+# Details:
+Set up the foundational elements of the application. This involves creating the Next.js project configured for the App Router, installing and configuring shadcn/ui which includes setting up Tailwind CSS, and defining the main layout structure for the game interface using placeholder elements.
+
+# Test Strategy:
+Verify Next.js project runs (npm run dev or equivalent).
+Verify shadcn/ui components can be added and render correctly (e.g., add a <Button> from shadcn/ui to the main page).
+Inspect the main game page in the browser to confirm the basic layout structure (e.g., using CSS Grid/Flexbox to define areas for Board, Player Info, Controls) renders as expected with placeholder content or styles.
+
+# Subtasks:
+## 1.1 Initialize Next.js Project [todo]
+### Dependencies: None
+### Description: Create a new Next.js project using the App Router.
+### Details:
+Run npx create-next-app@latest
+Select options for TypeScript, Tailwind CSS, and importantly, App Router.
+Navigate into the project directory.
+
+## 1.2 Integrate shadcn/ui [todo]
+### Dependencies: 1.1
+### Description: Add shadcn/ui library and configure it.
+### Details:
+Run npx shadcn-ui@latest init.
+Follow the prompts to configure tailwind.config.js, globals.css, CSS variables, etc.
+Install a basic component like button to verify: npx shadcn-ui@latest add button.
+
+## 1.3 Create Main Game Page Route [todo]
+### Dependencies: 1.1
+### Description: Define the primary route where the game will be played.
+### Details:
+Use the default app/page.tsx or create a new route like app/game/page.tsx.
+Ensure this page component renders basic text initially.
+
+## 1.4 Design Basic Layout Structure [todo]
+### Dependencies: 1.1, 1.2, 1.3
+### Description: Use CSS (likely Tailwind classes) to define the main areas of the game interface.
+### Details:
+Within the main game page component (page.tsx), use div elements styled with Tailwind's Flexbox or Grid utilities.
+Create distinct visual areas (even if empty) for:
+Game Board (central area)
+Player Information Panels (sidebar or top/bottom)
+Game Controls (dice, actions)
+Event Log / Card Display Area (optional, but good to plan for)
+Use placeholder background colors or borders to visualize the areas. 

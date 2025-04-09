@@ -1,0 +1,58 @@
+# Task ID: 5
+# Title: Implement Property Logic - Landing & Buying
+# Status: todo
+# Dependencies: 3, 4
+# Priority: high
+# Description: Implement the logic that occurs when a player lands on an unowned property square, including the option to buy it.
+# Details:
+After a player moves (Task 4), check the type of the destination square. If it's an unowned property, check affordability and present the player with the option to buy. If bought, update the player's money and list of owned properties in the state.
+
+# Test Strategy:
+Land on an unowned property: Verify a "Buy" / "Pass" option appears (e.g., in a Dialog).
+Test affordability check: Verify "Buy" is disabled or handled if player money < property price.
+Click "Buy": Verify player's money decreases by property price in state. Verify property ID/name is added to player's propertiesOwned array in state. Verify the property is marked as owned (e.g., update a shared property status state or visually on the board).
+Click "Pass": Verify no state changes occur related to buying.
+Land on an already owned property: Verify the buy option does not appear.
+
+# Subtasks:
+## 5.1 Implement Landing Action Dispatcher [todo]
+### Dependencies: 3.2, 4.2
+### Description: After movement, determine the landed square type and trigger appropriate actions.
+### Details:
+Enhance the logic that runs after movePlayer (Task 4.2).
+Get the data for the newPosition square (from boardData defined in Task 2.1).
+Get the current player's state.
+Based on the square type:
+If 'property' and unowned: Trigger the "Offer Buy" logic (Subtask 5.2).
+(Later Tasks): If 'property' and owned, trigger Rent logic. If 'chance', trigger Chance card draw, etc.
+Need a way to track property ownership. This could be adding an ownerId field to the square data in the game state (don't mutate the original boardData constant) or maintaining a separate mapping of squareId -> ownerId.
+
+## 5.2 Implement "Offer Buy" UI and Logic [todo]
+### Dependencies: 1.2, 3.2, 5.1
+### Description: Present the option to buy an unowned property and handle the decision.
+### Details:
+Create a function offerBuyProperty(playerId, squareData).
+Check if player.money >= squareData.price.
+Use a shadcn Dialog or AlertDialog component to display:
+Property Name and Price.
+"Buy" button (enabled only if affordable).
+"Pass" (or "Auction" - skip auction for now) button.
+Set state to control the Dialog's visibility.
+
+## 5.3 Implement Buy Action [todo]
+### Dependencies: 3.2, 5.2
+### Description: Update game state when a player buys a property.
+### Details:
+Create a function buyProperty(playerId, squareData).
+This function (called when "Buy" is clicked in the Dialog):
+Deducts squareData.price from player.money.
+Adds the squareData.id to the player.propertiesOwned array.
+Updates the property ownership state (e.g., set ownerId for this square ID).
+Closes the Dialog.
+
+## 5.4 Implement Pass Action [todo]
+### Dependencies: 5.2
+### Description: Handle the decision not to buy (closes the dialog).
+### Details:
+Implement the onClick for the "Pass" button.
+Simply closes the Buy Dialog. (Later, this could trigger an auction). 

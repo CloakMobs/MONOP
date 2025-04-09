@@ -1,0 +1,72 @@
+# Task ID: 7
+# Title: Implement Chance & Community Chest Cards
+# Status: todo
+# Dependencies: 3, 4, 5
+# Priority: medium
+# Description: Implement the functionality for drawing and acting upon Chance and Community Chest cards when landing on the respective squares.
+# Details:
+Define the content and actions of Chance/Community Chest cards. Implement the logic to draw a card when a player lands on the corresponding square, display the card's instruction, and execute the specified action by updating the game state.
+
+# Test Strategy:
+Land on Chance/CC Square: Verify a card dialog appears displaying text. Verify the correct deck (Chance/CC) is used.
+Card Actions:
+Money Change: Verify player money increases/decreases correctly.
+Move: Verify player position updates correctly (check Go bonus logic interaction). Verify movement happens immediately.
+Go To Jail: Verify player is moved to Jail square and inJail status is set.
+Get Out of Jail Free: Verify player's getOutOfJailCards count increases.
+Deck Shuffling/Cycling: Verify cards are drawn sequentially or randomly, and the deck resets/shuffles when empty (basic implementation first).
+
+# Subtasks:
+## 7.1 Define Card Data Structures [todo]
+### Dependencies: None
+### Description: Create data structures to represent the Chance and Community Chest cards and their effects.
+### Details:
+Create files like src/data/chanceCards.ts and src/data/communityChestCards.ts.
+Define arrays of objects, each representing a card.
+Each card object should have: id, text (string displayed to player), and action (object describing the effect).
+action object examples:
+{ type: 'money', amount: 50 } (gain or negative for loss)
+{ type: 'moveTo', squareId: 0 } (move to specific square)
+{ type: 'moveRelative', steps: -3 }
+{ type: 'goToJail' }
+{ type: 'addGetOutOfJailCard' }
+{ type: 'payPerPlayer', amount: 10 }
+{ type: 'collectPerPlayer', amount: 10 }
+(Future): { type: 'moveToNearest', utilityOrRailroad: 'utility' }, { type: 'repairs', perHouse: 25, perHotel: 100 }
+
+## 7.2 Implement Card Deck State [todo]
+### Dependencies: 3.2, 7.1
+### Description: Manage the state of the card decks, including shuffling and drawing.
+### Details:
+Add state variables to the game state management for chanceDeck and communityChestDeck (shuffled copies of the card data).
+Add state for the current index or manage drawing/discarding.
+Implement a shuffleDeck function (e.g., using Fisher-Yates algorithm). Call this at game start.
+Implement drawCard(deckType) function:
+Takes 'chance' or 'community-chest'.
+Gets the next card from the corresponding deck state.
+Handles deck reshuffling if empty.
+Returns the drawn card object.
+
+## 7.3 Display Card UI [todo]
+### Dependencies: 1.2, 5.1, 7.2
+### Description: Show the drawn card's text to the player.
+### Details:
+In the landing action dispatcher (Task 5.1), if the square type is 'chance' or 'community-chest':
+Call drawCard(squareType).
+Use a shadcn Dialog or Alert to display the card.text.
+Include an "OK" button to close the dialog and trigger the action execution.
+Store the drawn card temporarily in component state or game state until the action is acknowledged/executed.
+
+## 7.4 Execute Card Actions [todo]
+### Dependencies: 3.2, 4.2, 6.1, 7.2, 7.3, 8 (Jail Logic)
+### Description: Update the game state based on the drawn card's action.
+### Details:
+Create a function executeCardAction(playerId, cardAction).
+Use a switch statement or if/else based on cardAction.type:
+'money': Update player money.
+'moveTo': Update player position. Check for passing Go (call movePlayer or replicate its logic carefully).
+'moveRelative': Calculate new position and update. Check for passing Go.
+'goToJail': Call the "Go To Jail" logic (from Task 8).
+'addGetOutOfJailCard': Increment player's getOutOfJailCards count.
+'payPerPlayer' / 'collectPerPlayer': Iterate through other active players and adjust money.
+Call this function after the player dismisses the card dialog (Task 7.3). 

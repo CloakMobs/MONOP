@@ -1,0 +1,52 @@
+# Task ID: 3
+# Title: Implement Player State & UI Display
+# Status: todo
+# Dependencies: 1
+# Priority: high
+# Description: Define the data structure for players, set up client-side state management, and display basic player information on the UI.
+# Details:
+Establish how player data (money, position, properties) will be stored and managed within the application's state. Choose and implement a state management solution (React Context is suitable for simpler cases). Create UI components to display each player's current status.
+
+# Test Strategy:
+Verify initial player data is loaded into the state correctly.
+Verify PlayerInfo components render for the correct number of players.
+Verify each PlayerInfo component displays the correct initial data (name, money).
+Test state updates (e.g., manually changing money in a dev tool or temporary button) reflect correctly in the UI.
+
+# Subtasks:
+## 3.1 Define Player Data Structure [todo]
+### Dependencies: None
+### Description: Define the structure for holding player-specific information.
+### Details:
+Define a TypeScript interface or type for Player.
+Include fields: id (string/number), name (string), color (string, for token/UI), money (number), position (number, index 0-39), propertiesOwned (array of square IDs/names), inJail (boolean), jailTurns (number), getOutOfJailCards (number).
+
+## 3.2 Choose and Set Up State Management [todo]
+### Dependencies: 1.1
+### Description: Implement a client-side state management solution.
+### Details:
+Choose a method: React Context API (good for simplicity) or a library like Zustand or Jotai (more scalable).
+Create the context provider/store.
+Define the initial game state, including a list of players (e.g., 2 players with default starting values).
+Make the state accessible to components that need it (wrap the layout or page in the provider). Mark necessary components/context as 'use client'.
+
+## 3.3 Create PlayerInfo Component [todo]
+### Dependencies: 1.2, 3.1
+### Description: Develop a React component to display a single player's status.
+### Details:
+Create components/PlayerInfo.tsx.
+Accept a player object (from 3.1) as props.
+Use shadcn components (Card, CardHeader, CardTitle, CardContent, Avatar, Badge) to display:
+Player Name
+Player Money
+Color indicator (e.g., Avatar background or a colored Badge)
+Optionally: Placeholder for owned properties count.
+
+## 3.4 Render PlayerInfo Panels [todo]
+### Dependencies: 3.2, 3.3
+### Description: Display the PlayerInfo component for each player in the game state.
+### Details:
+In the main game page layout, access the list of players from the state management store.
+Map over the players array.
+Render a PlayerInfo component for each player, passing the player object as props.
+Place these components in the designated player information area of the layout (from Task 1.4). 

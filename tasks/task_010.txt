@@ -1,0 +1,67 @@
+# Task ID: 10
+# Title: UI Polish, Integration, and Refinements
+# Status: todo
+# Dependencies: All previous tasks (1-9)
+# Priority: medium
+# Description: Improve the user interface using more shadcn components, enhance visual feedback, ensure smooth interactions between all game mechanics, and add basic setup options.
+# Details:
+Focus on improving the user experience and the overall presentation. Replace basic elements with more suitable shadcn components, add visual cues for game state (like owned properties), refine the flow of actions, fix bugs found during integration testing, and potentially add a simple way to configure the game (e.g., number of players).
+
+# Test Strategy:
+Playthrough Testing: Play several full game scenarios (hotseat) focusing on the flow and interactions. Does buying work smoothly? Does rent trigger correctly? Is jail logic clear? Does turn advancement feel right?
+UI Component Audit: Review all UI elements. Are shadcn components used effectively? Is the layout clean? Is information presented clearly?
+Visual Feedback Check: Verify owned properties are visually marked on the board. Verify the active player is clearly highlighted. Verify dice animations/results are clear. Verify notifications (Toast) appear correctly.
+Setup Test: If setup options are added, test starting games with different numbers of players.
+
+# Subtasks:
+## 10.1 Refine UI with Shadcn Components [todo]
+### Dependencies: 1.2, All UI components
+### Description: Replace basic HTML elements or placeholders with appropriate shadcn components for better aesthetics and functionality.
+### Details:
+Review components created in previous tasks (Board, Square, PlayerInfo, Dice, Dialogs).
+Consider using:
+Input for player names during setup (Subtask 10.4).
+Table to display lists of owned properties within PlayerInfo.
+HoverCard or Tooltip to show square details on hover.
+Improve usage of Dialog, AlertDialog, Toast for consistency.
+Use Avatar more effectively.
+Ensure consistent styling (colors, spacing) using Tailwind and shadcn conventions.
+
+## 10.2 Add Visual Feedback for Game State [todo]
+### Dependencies: 2.3, 3.3, 5.3
+### Description: Enhance the UI to better communicate the current state of the game.
+### Details:
+Active Player Highlighting: Apply a distinct style (e.g., border, background) to the PlayerInfo card of the currentPlayerIndex.
+Property Ownership on Board: Modify the Square component. If a property is owned, display a small marker/badge with the owner's color (retrieve owner from state based on square ID).
+Dice Visualization: Improve the display of dice results beyond simple text (e.g., use SVGs or styled divs that look like dice). Add a subtle roll animation if desired.
+
+## 10.3 Integrate and Test Mechanics Flow [todo]
+### Dependencies: All previous tasks
+### Description: Ensure all implemented game mechanics work together correctly and smoothly.
+### Details:
+Perform end-to-end testing by playing through various scenarios.
+Pay attention to the sequence of events:
+Roll -> Move -> Check Passing Go -> Land Action (Buy/Rent/Card/Tax/Jail) -> End Turn.
+Does landing on Chance correctly trigger card display and then its action (e.g., movement, then subsequent square action)?
+Is the flow in/out of Jail logical?
+Fix bugs related to state updates, race conditions (less likely with client-side state, but possible), and incorrect logic triggers.
+
+## 10.4 Implement Basic Game Setup (Optional) [todo]
+### Dependencies: 3.2
+### Description: Add a simple pre-game screen to configure basic options like the number of players.
+### Details:
+Create a new route or conditional rendering logic on the main page for a setup phase.
+Allow selecting the number of players (e.g., 2-4).
+Use shadcn Input fields for players to enter their names.
+Add a "Start Game" button.
+On start, initialize the game state (Task 3.2) with the configured number of players and their names.
+
+## 10.5 Code Cleanup and Refactoring [todo]
+### Dependencies: All previous tasks
+### Description: Review code for clarity, consistency, and potential improvements.
+### Details:
+Ensure consistent naming conventions.
+Break down overly large components or functions.
+Add comments where logic is complex.
+Remove unused code or console logs.
+Optimize state updates if performance issues are noticed (unlikely for this scale initially). 
